@@ -192,7 +192,9 @@ var AppModule = /** @class */ (function () {
                 _angular_material_progress_bar__WEBPACK_IMPORTED_MODULE_11__["MatProgressBarModule"],
                 _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_12__["MatSnackBarModule"]
             ],
-            providers: [],
+            providers: [
+                { provide: _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_12__["MAT_SNACK_BAR_DEFAULT_OPTIONS"], useValue: { duration: 2500 } }
+            ],
             bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_4__["AppComponent"]]
         })
     ], AppModule);
@@ -627,6 +629,9 @@ var BoardComponent = /** @class */ (function () {
     BoardComponent.prototype.ngOnInit = function () {
     };
     BoardComponent.prototype.handleBoxClick = function (index) {
+        if (this.gameState.state === _models_game_state__WEBPACK_IMPORTED_MODULE_5__["GameState"].gameOver) {
+            return;
+        }
         var cell = this.boardService.board[index];
         // Handle issing selection for number or color
         if (this.gameState.state !== _models_game_state__WEBPACK_IMPORTED_MODULE_5__["GameState"].markingCells) {
@@ -673,7 +678,7 @@ var BoardComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"panel-container\">\n  <mat-button-toggle-group #number=\"matButtonToggleGroup\" (change)=\"onNumberChange($event.value)\">\n    <mat-button-toggle [disabled]=\"!enabledNumbers[0]\" value=\"0\" aria-label=\"Text align left\">{{numberDice[0]}}\n    </mat-button-toggle>\n    <mat-button-toggle [disabled]=\"!enabledNumbers[1]\" value=\"1\" aria-label=\"Text align left\">{{numberDice[1]}}\n    </mat-button-toggle>\n    <mat-button-toggle [disabled]=\"!enabledNumbers[2]\" value=\"2\" aria-label=\"Text align left\">{{numberDice[2]}}\n    </mat-button-toggle>\n  </mat-button-toggle-group>\n  <mat-button-toggle-group #color=\"matButtonToggleGroup\" (change)=\"onColorChange($event.value)\">\n    <mat-button-toggle [disabled]=\"!enabledColors[0]\" value=\"0\" [ngClass]=\"colorDice[0]\" aria-label=\"Text align left\">✘\n    </mat-button-toggle>\n    <mat-button-toggle [disabled]=\"!enabledColors[1]\" value=\"1\" [ngClass]=\"colorDice[1]\" aria-label=\"Text align left\">✘\n    </mat-button-toggle>\n    <mat-button-toggle [disabled]=\"!enabledColors[2]\" value=\"2\" [ngClass]=\"colorDice[2]\" aria-label=\"Text align left\">✘\n    </mat-button-toggle>\n  </mat-button-toggle-group>\n  <button mat-raised-button [color]=\"buttonColor\"  (click)=\"endTurn();color.value='';number.value='';\">{{buttonText}}</button>\n</div>\n<div>\n  <app-wildcard-panel></app-wildcard-panel>\n</div>"
+module.exports = "<div class=\"panel-container\">\n  <mat-button-toggle-group [disabled]=\"gameOver\" #number=\"matButtonToggleGroup\" (change)=\"onNumberChange($event.value)\">\n    <mat-button-toggle [disabled]=\"!enabledNumbers[0]\" value=\"0\" aria-label=\"Text align left\">{{numberDice[0]}}\n    </mat-button-toggle>\n    <mat-button-toggle [disabled]=\"!enabledNumbers[1]\" value=\"1\" aria-label=\"Text align left\">{{numberDice[1]}}\n    </mat-button-toggle>\n    <mat-button-toggle [disabled]=\"!enabledNumbers[2]\" value=\"2\" aria-label=\"Text align left\">{{numberDice[2]}}\n    </mat-button-toggle>\n  </mat-button-toggle-group>\n  <mat-button-toggle-group [disabled]=\"gameOver\" #color=\"matButtonToggleGroup\" (change)=\"onColorChange($event.value)\">\n    <mat-button-toggle [disabled]=\"!enabledColors[0]\" value=\"0\" [ngClass]=\"colorDice[0]\" aria-label=\"Text align left\">✘\n    </mat-button-toggle>\n    <mat-button-toggle [disabled]=\"!enabledColors[1]\" value=\"1\" [ngClass]=\"colorDice[1]\" aria-label=\"Text align left\">✘\n    </mat-button-toggle>\n    <mat-button-toggle [disabled]=\"!enabledColors[2]\" value=\"2\" [ngClass]=\"colorDice[2]\" aria-label=\"Text align left\">✘\n    </mat-button-toggle>\n  </mat-button-toggle-group>\n  <button *ngIf=\"!gameOver\" mat-raised-button [color]=\"buttonColor\"  (click)=\"endTurn();color.value='';number.value='';\">{{buttonText}}</button>\n  <button *ngIf=\"gameOver\" mat-raised-button color=\"primary\"  (click)=\"endGame();color.value='';number.value='';\">New Game</button>\n</div>\n<div>\n  <app-wildcard-panel></app-wildcard-panel>\n</div>"
 
 /***/ }),
 
@@ -684,7 +689,7 @@ module.exports = "<div class=\"panel-container\">\n  <mat-button-toggle-group #n
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".Green {\n  color: yellowgreen; }\n\n.Yellow {\n  color: gold; }\n\n.Blue {\n  color: lightskyblue; }\n\n.Pink {\n  color: mediumvioletred; }\n\n.Orange {\n  color: orange; }\n\n.panel-container {\n  padding-top: 1vmin;\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-pack: space-evenly;\n          justify-content: space-evenly; }\n\nbutton {\n  width: 20; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvZGljZS1wYW5lbC9DOlxcVXNlcnNcXE1hbnVlbFxcRG9jdW1lbnRzXFxHaXRIdWJcXHNvbGl0YWlyZS1rZWVyL3NyY1xcYXBwXFxkaWNlLXBhbmVsXFxkaWNlLXBhbmVsLmNvbXBvbmVudC5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0ksa0JBQWtCLEVBQUE7O0FBRXRCO0VBQ0ksV0FBVyxFQUFBOztBQUVmO0VBQ0ksbUJBQW1CLEVBQUE7O0FBRXZCO0VBQ0ksc0JBQXNCLEVBQUE7O0FBRTFCO0VBQ0ksYUFBYSxFQUFBOztBQUVqQjtFQUNJLGtCQUFrQjtFQUNsQixvQkFBYTtFQUFiLGFBQWE7RUFDYiw4QkFBNkI7VUFBN0IsNkJBQTZCLEVBQUE7O0FBRWpDO0VBQ0ksU0FBUyxFQUFBIiwiZmlsZSI6InNyYy9hcHAvZGljZS1wYW5lbC9kaWNlLXBhbmVsLmNvbXBvbmVudC5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLkdyZWVuIHtcclxuICAgIGNvbG9yOiB5ZWxsb3dncmVlbjtcclxufVxyXG4uWWVsbG93IHtcclxuICAgIGNvbG9yOiBnb2xkO1xyXG59XHJcbi5CbHVlIHtcclxuICAgIGNvbG9yOiBsaWdodHNreWJsdWU7XHJcbn1cclxuLlBpbmsge1xyXG4gICAgY29sb3I6IG1lZGl1bXZpb2xldHJlZDtcclxufVxyXG4uT3JhbmdlIHtcclxuICAgIGNvbG9yOiBvcmFuZ2U7XHJcbn1cclxuLnBhbmVsLWNvbnRhaW5lciB7XHJcbiAgICBwYWRkaW5nLXRvcDogMXZtaW47XHJcbiAgICBkaXNwbGF5OiBmbGV4O1xyXG4gICAganVzdGlmeS1jb250ZW50OiBzcGFjZS1ldmVubHk7XHJcbn1cclxuYnV0dG9uIHtcclxuICAgIHdpZHRoOiAyMDtcclxufSJdfQ== */"
+module.exports = ".Green {\n  color: yellowgreen; }\n\n.Yellow {\n  color: gold; }\n\n.Blue {\n  color: lightskyblue; }\n\n.Pink {\n  color: mediumvioletred; }\n\n.Orange {\n  color: orange; }\n\n.panel-container {\n  padding-top: 1vmin;\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-pack: space-evenly;\n          justify-content: space-evenly; }\n\nbutton {\n  width: 20; }\n\nmat-button-toggle:focus {\n  outline: none; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvZGljZS1wYW5lbC9DOlxcVXNlcnNcXE1hbnVlbFxcRG9jdW1lbnRzXFxHaXRIdWJcXHNvbGl0YWlyZS1rZWVyL3NyY1xcYXBwXFxkaWNlLXBhbmVsXFxkaWNlLXBhbmVsLmNvbXBvbmVudC5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0ksa0JBQWtCLEVBQUE7O0FBRXRCO0VBQ0ksV0FBVyxFQUFBOztBQUVmO0VBQ0ksbUJBQW1CLEVBQUE7O0FBRXZCO0VBQ0ksc0JBQXNCLEVBQUE7O0FBRTFCO0VBQ0ksYUFBYSxFQUFBOztBQUVqQjtFQUNJLGtCQUFrQjtFQUNsQixvQkFBYTtFQUFiLGFBQWE7RUFDYiw4QkFBNkI7VUFBN0IsNkJBQTZCLEVBQUE7O0FBRWpDO0VBQ0ksU0FBUyxFQUFBOztBQUViO0VBQTBCLGFBQWEsRUFBQSIsImZpbGUiOiJzcmMvYXBwL2RpY2UtcGFuZWwvZGljZS1wYW5lbC5jb21wb25lbnQuc2NzcyIsInNvdXJjZXNDb250ZW50IjpbIi5HcmVlbiB7XHJcbiAgICBjb2xvcjogeWVsbG93Z3JlZW47XHJcbn1cclxuLlllbGxvdyB7XHJcbiAgICBjb2xvcjogZ29sZDtcclxufVxyXG4uQmx1ZSB7XHJcbiAgICBjb2xvcjogbGlnaHRza3libHVlO1xyXG59XHJcbi5QaW5rIHtcclxuICAgIGNvbG9yOiBtZWRpdW12aW9sZXRyZWQ7XHJcbn1cclxuLk9yYW5nZSB7XHJcbiAgICBjb2xvcjogb3JhbmdlO1xyXG59XHJcbi5wYW5lbC1jb250YWluZXIge1xyXG4gICAgcGFkZGluZy10b3A6IDF2bWluO1xyXG4gICAgZGlzcGxheTogZmxleDtcclxuICAgIGp1c3RpZnktY29udGVudDogc3BhY2UtZXZlbmx5O1xyXG59XHJcbmJ1dHRvbiB7XHJcbiAgICB3aWR0aDogMjA7XHJcbn1cclxubWF0LWJ1dHRvbi10b2dnbGU6Zm9jdXMgeyBvdXRsaW5lOiBub25lOyB9Il19 */"
 
 /***/ }),
 
@@ -704,6 +709,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _game_state_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../game-state.service */ "./src/app/game-state.service.ts");
 /* harmony import */ var _board_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../board.service */ "./src/app/board.service.ts");
 /* harmony import */ var _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/material/snack-bar */ "./node_modules/@angular/material/esm5/snack-bar.es5.js");
+/* harmony import */ var _models_game_state__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../models/game-state */ "./src/app/models/game-state.ts");
+
 
 
 
@@ -722,6 +729,7 @@ var DicePanelComponent = /** @class */ (function () {
         this.enabledColors = [true, true, true];
         this.buttonText = "Skip turn";
         this.buttonColor = "warn";
+        this.gameOver = false;
         this.wildcardsRemaining = 0;
         this.wildcardsSelected = 0;
     }
@@ -738,17 +746,22 @@ var DicePanelComponent = /** @class */ (function () {
         this.gameStateService.wildcardsRemaining.subscribe(function (numberOfWildcards) {
             _this.wildcardsRemaining = numberOfWildcards;
         });
-        this.gameStateService.currentTurn.subscribe(function (turn) {
-            console.log(turn);
+        this.gameStateService.gameState.subscribe(function (state) {
+            if (state === _models_game_state__WEBPACK_IMPORTED_MODULE_6__["GameState"].gameOver) {
+                _this.gameOver = true;
+            }
+            else {
+                _this.gameOver = false;
+            }
         });
         this.endTurn();
     };
     DicePanelComponent.prototype.setFinishButton = function () {
-        this.buttonText = "Finish turn";
+        this.buttonText = "Finish Turn";
         this.buttonColor = "primary";
     };
     DicePanelComponent.prototype.setSkipButton = function () {
-        this.buttonText = "Skip turn";
+        this.buttonText = "Skip Turn";
         this.buttonColor = "warn";
     };
     DicePanelComponent.prototype.endTurn = function () {
@@ -768,6 +781,10 @@ var DicePanelComponent = /** @class */ (function () {
             this.boardService.clearCandidateCells();
         }
         this.gameStateService.nextTurn();
+        if (this.gameOver) {
+            this._snackbar.open("Game Over");
+            return;
+        }
         this.diceService.clearSelection();
         this.diceService.rollAllDice();
         this.numberDice = this.diceService.numberDice;
@@ -779,6 +796,11 @@ var DicePanelComponent = /** @class */ (function () {
         if (this.gameStateService.turn > 0) {
             this._snackbar.open("Turn " + this.gameStateService.turn + " of 30");
         }
+    };
+    DicePanelComponent.prototype.endGame = function () {
+        this.gameStateService.newGame();
+        this.boardService.resetBoard();
+        this.endTurn();
     };
     DicePanelComponent.prototype.dissableAllWildcards = function () {
         var _this = this;
@@ -919,9 +941,11 @@ var GameStateService = /** @class */ (function () {
         this._turn = 0;
         this._wildcards = 8;
         this._wildcardsRemaining = new rxjs__WEBPACK_IMPORTED_MODULE_3__["BehaviorSubject"](this._wildcards);
+        this._gameState = new rxjs__WEBPACK_IMPORTED_MODULE_3__["BehaviorSubject"](this.state);
         this._currentTurn = new rxjs__WEBPACK_IMPORTED_MODULE_3__["BehaviorSubject"](this._turn);
         this.wildcardsRemaining = this._wildcardsRemaining.asObservable();
         this.currentTurn = this._currentTurn.asObservable();
+        this.gameState = this._gameState.asObservable();
     }
     Object.defineProperty(GameStateService.prototype, "turn", {
         get: function () {
@@ -955,9 +979,22 @@ var GameStateService = /** @class */ (function () {
         }
     };
     GameStateService.prototype.nextTurn = function () {
-        this.state = _models_game_state__WEBPACK_IMPORTED_MODULE_2__["GameState"].start;
+        if (this._turn === 30) {
+            this.state = _models_game_state__WEBPACK_IMPORTED_MODULE_2__["GameState"].gameOver;
+            this._gameState.next(this.state);
+        }
+        else {
+            this.state = _models_game_state__WEBPACK_IMPORTED_MODULE_2__["GameState"].start;
+            this._gameState.next(this.state);
+        }
         this._turn++;
         this._currentTurn.next(this._turn);
+    };
+    GameStateService.prototype.newGame = function () {
+        this._turn = 0;
+        this.state = _models_game_state__WEBPACK_IMPORTED_MODULE_2__["GameState"].start;
+        this._wildcards = 8;
+        this._wildcardsRemaining.next(this._wildcards);
     };
     GameStateService.prototype.useWildcards = function (wildcardsUsed) {
         this._wildcards -= wildcardsUsed;
@@ -1015,6 +1052,7 @@ var GameState;
     GameState[GameState["selectedColor"] = 1] = "selectedColor";
     GameState[GameState["selectedNumber"] = 2] = "selectedNumber";
     GameState[GameState["markingCells"] = 3] = "markingCells";
+    GameState[GameState["gameOver"] = 4] = "gameOver";
 })(GameState || (GameState = {}));
 
 
@@ -1341,7 +1379,7 @@ module.exports = "<p>\n  <mat-icon [ngClass]=\"{available: wildcardsRemaining > 
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "mat-icon.available {\n  opacity: 1; }\n\nmat-icon {\n  opacity: .4; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvd2lsZGNhcmQtcGFuZWwvQzpcXFVzZXJzXFxNYW51ZWxcXERvY3VtZW50c1xcR2l0SHViXFxzb2xpdGFpcmUta2Vlci9zcmNcXGFwcFxcd2lsZGNhcmQtcGFuZWxcXHdpbGRjYXJkLXBhbmVsLmNvbXBvbmVudC5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0ksVUFBVSxFQUFBOztBQUVkO0VBQ0ksV0FBVyxFQUFBIiwiZmlsZSI6InNyYy9hcHAvd2lsZGNhcmQtcGFuZWwvd2lsZGNhcmQtcGFuZWwuY29tcG9uZW50LnNjc3MiLCJzb3VyY2VzQ29udGVudCI6WyJtYXQtaWNvbi5hdmFpbGFibGUge1xyXG4gICAgb3BhY2l0eTogMTtcclxufVxyXG5tYXQtaWNvbiB7XHJcbiAgICBvcGFjaXR5OiAuNDtcclxufSJdfQ== */"
+module.exports = "mat-icon.available {\n  opacity: 1; }\n\nmat-icon {\n  opacity: .25; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvd2lsZGNhcmQtcGFuZWwvQzpcXFVzZXJzXFxNYW51ZWxcXERvY3VtZW50c1xcR2l0SHViXFxzb2xpdGFpcmUta2Vlci9zcmNcXGFwcFxcd2lsZGNhcmQtcGFuZWxcXHdpbGRjYXJkLXBhbmVsLmNvbXBvbmVudC5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0ksVUFBVSxFQUFBOztBQUVkO0VBQ0ksWUFBWSxFQUFBIiwiZmlsZSI6InNyYy9hcHAvd2lsZGNhcmQtcGFuZWwvd2lsZGNhcmQtcGFuZWwuY29tcG9uZW50LnNjc3MiLCJzb3VyY2VzQ29udGVudCI6WyJtYXQtaWNvbi5hdmFpbGFibGUge1xyXG4gICAgb3BhY2l0eTogMTtcclxufVxyXG5tYXQtaWNvbiB7XHJcbiAgICBvcGFjaXR5OiAuMjU7XHJcbn0iXX0= */"
 
 /***/ }),
 
