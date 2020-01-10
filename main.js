@@ -147,6 +147,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _play_play_component__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./play/play.component */ "./src/app/play/play.component.ts");
 /* harmony import */ var _score_score_component__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./score/score.component */ "./src/app/score/score.component.ts");
 /* harmony import */ var _progress_bar_progress_bar_component__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./progress-bar/progress-bar.component */ "./src/app/progress-bar/progress-bar.component.ts");
+/* harmony import */ var _game_over_snack_bar_game_over_snack_bar_component__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./game-over-snack-bar/game-over-snack-bar.component */ "./src/app/game-over-snack-bar/game-over-snack-bar.component.ts");
+
 
 
 
@@ -180,7 +182,8 @@ var AppModule = /** @class */ (function () {
                 _board_editor_board_editor_component__WEBPACK_IMPORTED_MODULE_15__["BoardEditorComponent"],
                 _play_play_component__WEBPACK_IMPORTED_MODULE_16__["PlayComponent"],
                 _score_score_component__WEBPACK_IMPORTED_MODULE_17__["ScoreComponent"],
-                _progress_bar_progress_bar_component__WEBPACK_IMPORTED_MODULE_18__["ProgressBarComponent"]
+                _progress_bar_progress_bar_component__WEBPACK_IMPORTED_MODULE_18__["ProgressBarComponent"],
+                _game_over_snack_bar_game_over_snack_bar_component__WEBPACK_IMPORTED_MODULE_19__["GameOverSnackBarComponent"]
             ],
             imports: [
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
@@ -194,6 +197,9 @@ var AppModule = /** @class */ (function () {
             ],
             providers: [
                 { provide: _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_12__["MAT_SNACK_BAR_DEFAULT_OPTIONS"], useValue: { duration: 2500 } }
+            ],
+            entryComponents: [
+                _game_over_snack_bar_game_over_snack_bar_component__WEBPACK_IMPORTED_MODULE_19__["GameOverSnackBarComponent"]
             ],
             bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_4__["AppComponent"]]
         })
@@ -710,6 +716,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _board_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../board.service */ "./src/app/board.service.ts");
 /* harmony import */ var _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/material/snack-bar */ "./node_modules/@angular/material/esm5/snack-bar.es5.js");
 /* harmony import */ var _models_game_state__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../models/game-state */ "./src/app/models/game-state.ts");
+/* harmony import */ var _game_over_snack_bar_game_over_snack_bar_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../game-over-snack-bar/game-over-snack-bar.component */ "./src/app/game-over-snack-bar/game-over-snack-bar.component.ts");
+
 
 
 
@@ -782,7 +790,7 @@ var DicePanelComponent = /** @class */ (function () {
         }
         this.gameStateService.nextTurn();
         if (this.gameOver) {
-            this._snackbar.open("Game Over");
+            this._snackbar.openFromComponent(_game_over_snack_bar_game_over_snack_bar_component__WEBPACK_IMPORTED_MODULE_7__["GameOverSnackBarComponent"], { duration: undefined });
             return;
         }
         this.diceService.clearSelection();
@@ -911,6 +919,107 @@ var DiceService = /** @class */ (function () {
         tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
     ], DiceService);
     return DiceService;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/game-over-snack-bar/game-over-snack-bar.component.html":
+/*!************************************************************************!*\
+  !*** ./src/app/game-over-snack-bar/game-over-snack-bar.component.html ***!
+  \************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<span id=\"aligner\">\n  <span id=\"game-over\">\n    Game Over\n  </span>\n  <span id=\"lower-row\">\n    <span>\n      Score:\n    </span>\n    <span></span>\n    <span>\n      <mat-icon *ngIf=\"stars <= 0\">mood_bad</mat-icon>\n      <ng-container *ngIf=\"stars > 0\">\n        <mat-icon *ngIf=\"stars >= 1\">star</mat-icon>\n        <mat-icon *ngIf=\"stars < 1\">star_outline</mat-icon>\n        <mat-icon *ngIf=\"stars >= 2\">star</mat-icon>\n        <mat-icon *ngIf=\"stars < 2\">star_outline</mat-icon>\n        <mat-icon *ngIf=\"stars >= 3\">star</mat-icon>\n        <mat-icon *ngIf=\"stars < 3\">star_outline</mat-icon>\n        <mat-icon *ngIf=\"stars >= 4\">star</mat-icon>\n        <mat-icon *ngIf=\"stars < 4\">star_outline</mat-icon>\n        <mat-icon *ngIf=\"stars % 1 !== 0\">star_half</mat-icon>\n      </ng-container>\n    </span>\n  </span>\n</span>\n"
+
+/***/ }),
+
+/***/ "./src/app/game-over-snack-bar/game-over-snack-bar.component.scss":
+/*!************************************************************************!*\
+  !*** ./src/app/game-over-snack-bar/game-over-snack-bar.component.scss ***!
+  \************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "#aligner {\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-orient: vertical;\n  -webkit-box-direction: normal;\n          flex-direction: column;\n  -webkit-box-align: center;\n          align-items: center;\n  -webkit-box-pack: center;\n          justify-content: center; }\n\n#game-over {\n  padding-bottom: 1vmin; }\n\n#lower-row {\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-align: center;\n          align-items: center;\n  justify-content: space-around; }\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvZ2FtZS1vdmVyLXNuYWNrLWJhci9DOlxcVXNlcnNcXE1hbnVlbFxcRG9jdW1lbnRzXFxHaXRIdWJcXHNvbGl0YWlyZS1rZWVyL3NyY1xcYXBwXFxnYW1lLW92ZXItc25hY2stYmFyXFxnYW1lLW92ZXItc25hY2stYmFyLmNvbXBvbmVudC5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0ksb0JBQWE7RUFBYixhQUFhO0VBQ2IsNEJBQXNCO0VBQXRCLDZCQUFzQjtVQUF0QixzQkFBc0I7RUFDdEIseUJBQW1CO1VBQW5CLG1CQUFtQjtFQUNuQix3QkFBdUI7VUFBdkIsdUJBQXVCLEVBQUE7O0FBRTNCO0VBQ0kscUJBQXFCLEVBQUE7O0FBRXpCO0VBQ0ksb0JBQWE7RUFBYixhQUFhO0VBQ2IseUJBQW1CO1VBQW5CLG1CQUFtQjtFQUNuQiw2QkFBNkIsRUFBQSIsImZpbGUiOiJzcmMvYXBwL2dhbWUtb3Zlci1zbmFjay1iYXIvZ2FtZS1vdmVyLXNuYWNrLWJhci5jb21wb25lbnQuc2NzcyIsInNvdXJjZXNDb250ZW50IjpbIiNhbGlnbmVyICB7XHJcbiAgICBkaXNwbGF5OiBmbGV4O1xyXG4gICAgZmxleC1kaXJlY3Rpb246IGNvbHVtbjtcclxuICAgIGFsaWduLWl0ZW1zOiBjZW50ZXI7XHJcbiAgICBqdXN0aWZ5LWNvbnRlbnQ6IGNlbnRlcjtcclxufVxyXG4jZ2FtZS1vdmVyIHtcclxuICAgIHBhZGRpbmctYm90dG9tOiAxdm1pbjtcclxufVxyXG4jbG93ZXItcm93ICB7XHJcbiAgICBkaXNwbGF5OiBmbGV4O1xyXG4gICAgYWxpZ24taXRlbXM6IGNlbnRlcjtcclxuICAgIGp1c3RpZnktY29udGVudDogc3BhY2UtYXJvdW5kO1xyXG59Il19 */"
+
+/***/ }),
+
+/***/ "./src/app/game-over-snack-bar/game-over-snack-bar.component.ts":
+/*!**********************************************************************!*\
+  !*** ./src/app/game-over-snack-bar/game-over-snack-bar.component.ts ***!
+  \**********************************************************************/
+/*! exports provided: GameOverSnackBarComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GameOverSnackBarComponent", function() { return GameOverSnackBarComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/material/snack-bar */ "./node_modules/@angular/material/esm5/snack-bar.es5.js");
+/* harmony import */ var _score_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../score.service */ "./src/app/score.service.ts");
+
+
+
+
+
+var GameOverSnackBarComponent = /** @class */ (function () {
+    function GameOverSnackBarComponent(data, scoreService) {
+        this.data = data;
+        this.scoreService = scoreService;
+        this.totalScore = 0;
+        this.stars = 0;
+    }
+    GameOverSnackBarComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.scoreService.boardObservable.subscribe(function (score) {
+            _this.totalScore = score.wildcards + score.colors + score.columns + score.stars;
+            _this.stars = _this.starsFromScore();
+        });
+    };
+    GameOverSnackBarComponent.prototype.starsFromScore = function () {
+        if (this.totalScore < 0) {
+            return -1;
+        }
+        if (this.totalScore === 0) {
+            return 0;
+        }
+        if (this.totalScore <= 4) {
+            return 0.5;
+        }
+        if (this.totalScore <= 8) {
+            return 1;
+        }
+        if (this.totalScore <= 16) {
+            return 1.5;
+        }
+        if (this.totalScore <= 20) {
+            return 2;
+        }
+        if (this.totalScore <= 28) {
+            return 2.5;
+        }
+        if (this.totalScore <= 32) {
+            return 3;
+        }
+        if (this.totalScore <= 40) {
+            return 3.5;
+        }
+        return 4;
+    };
+    GameOverSnackBarComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+            selector: 'app-game-over-snack-bar',
+            template: __webpack_require__(/*! ./game-over-snack-bar.component.html */ "./src/app/game-over-snack-bar/game-over-snack-bar.component.html"),
+            styles: [__webpack_require__(/*! ./game-over-snack-bar.component.scss */ "./src/app/game-over-snack-bar/game-over-snack-bar.component.scss")]
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__param"](0, Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Inject"])(_angular_material_snack_bar__WEBPACK_IMPORTED_MODULE_2__["MAT_SNACK_BAR_DATA"])),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [Object, _score_service__WEBPACK_IMPORTED_MODULE_3__["ScoreService"]])
+    ], GameOverSnackBarComponent);
+    return GameOverSnackBarComponent;
 }());
 
 
