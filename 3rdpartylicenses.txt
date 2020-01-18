@@ -89,6 +89,8 @@ THE SOFTWARE.
 
 @angular/material/button-toggle
 
+@angular/material/expansion
+
 @angular/material/icon
 
 @angular/material/snack-bar
